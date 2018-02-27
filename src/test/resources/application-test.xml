@@ -38,7 +38,6 @@
 	
 	<int:chain input-channel="requestChannel">
 		<int:header-enricher>
-			<int:header name="access_token" value="968db036-8da4-44ec-841c-2e9595619e09"></int:header>
 			<int:header name="Accept" value="application/json"></int:header>
 			<int:header name="Content-Type" value="application/json"></int:header>
 		</int:header-enricher>
@@ -47,8 +46,6 @@
 			http-method="GET" header-mapper="headerMapper"
 			extract-request-payload="true" request-factory="requestFactory" 
 			expected-response-type="java.lang.String">
-			<int-http:uri-variable name="nbr"
-				expression="payload['accountNumber']"   />
 			<int-http:request-handler-advice-chain>
 				<ref bean="pciRestRetryAdvice" />
 			</int-http:request-handler-advice-chain>
@@ -102,7 +99,7 @@
 				</property>
 				<property name="retryPolicy">
 					 <bean class="org.springframework.retry.policy.ExpressionRetryPolicy">
-					 <!-- Retry only INTERNAL_SERVER_ERROR if you want add more condition , please check with org.springframework.http.HttpStatus class -->
+					
                             <constructor-arg index="0" type="org.springframework.expression.Expression" value="#{spelParser.parseExpression('cause.statusCode.value() == 500 or    cause.statusCode.value()==404')}" />
                             <property name="maxAttempts" value="1" />
                         </bean>
